@@ -2,8 +2,9 @@ name: Build Docker Image
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
+    branches:
+      - "**"    # startet bei jedem Branch
+  pull_request:   # startet auch bei jedem PR
 
 jobs:
   build:
