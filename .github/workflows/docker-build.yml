@@ -1,10 +1,10 @@
-name: Build Docker Image
+name: Build and Push to Nexus
 
 on:
   push:
     branches:
-      - "**"    # startet bei jedem Branch
-  pull_request:   # startet auch bei jedem PR
+      - "**"   # startet bei jedem Branch
+  pull_request:
 
 jobs:
   build:
@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+      uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -20,3 +20,15 @@ jobs:
       - name: Build Docker image
         run: |
           docker build -t example-kube:latest .
+
+      - name: Login to Nexus Docker Registry
+        run: |
+          echo "${{ secrets.NEXUS_PASSWORD }}" | docker login nexus.skyered-devops.de -u "${{ secrets.NEXUS_USERNAME }}" --password-stdin
+
+      - name: Tag image for Nexus
+        run: |
+          docker tag example-kube:latest nexus.skyered-devops.de/example-kube:latest
+
+      - name: Push image to Nexus
+        run: |
+          docker push nexus.skyered-devops.de/example-kube:latest
