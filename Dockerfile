@@ -1,4 +1,5 @@
-FROM node:12.2
+FROM node:18-slim
+
 
 ENV HOME=/home/app
 
