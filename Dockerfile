@@ -1,9 +1,9 @@
 FROM node:18-slim
 
-
 ENV HOME=/home/app
 
-RUN apt-get update && apt-get install htop
+# apt-get benötigt -y, sonst bricht der Build ab
+RUN apt-get update && apt-get install -y htop
 
 COPY package.json package-lock.json $HOME/node_docker/
 
